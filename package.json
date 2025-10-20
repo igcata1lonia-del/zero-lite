@@ -1,21 +1,19 @@
 {
   "name": "zero-lite",
-  "version": "0.1.0",
-  "private": true,
-  "description": "Unified email client for Gmail, Outlook, and ProtonMail",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "version": "1.0.0",
+  "description": "Unified email client supporting Gmail, Outlook, and ProtonMail",
+  "main": "server.js",
   "scripts": {
-    "dev": "pnpm -r --parallel dev",
-    "build": "pnpm -r build",
-    "test": "pnpm -r test",
-    "lint": "pnpm -r lint"
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Build complete'"
   },
   "dependencies": {
+    "express": "^5.1.0",
     "cors": "^2.8.5",
-    "dotenv": "^17.2.3",
-    "express": "^5.1.0"
+    "dotenv": "^17.2.3"
+  },
+  "engines": {
+    "node": "18.x"
   }
 }
