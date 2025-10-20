@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: zero-lite-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: DATABASE_URL
+        scope: build,runtime
+      - key: GMAIL_CLIENT_ID
+        scope: build,runtime
+      - key: GMAIL_CLIENT_SECRET
+        scope: build,runtime
+      - key: JWT_SECRET
+        scope: build,runtime
+      - key: PORT
+        value: "3001"
