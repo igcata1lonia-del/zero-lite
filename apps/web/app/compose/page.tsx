@@ -3,12 +3,20 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 
+const API_URL = 'https://3001-i9gw4and8y3yu84g1ujxh-6bf8d723.manusvm.computer';
+
+interface Account {
+  id: number;
+  displayName: string;
+  email: string;
+}
+
 export default function ComposePage() {
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
   const [accountId, setAccountId] = useState('');
-  const [accounts, setAccounts] = useState<any[]>([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -16,22 +24,13 @@ export default function ComposePage() {
   useEffect(() => {
     const fetchAccounts = async () => {
       try {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          window.location.href = '/auth';
-          return;
-        }
-
-        const response = await axios.get('http://localhost:3001/accounts', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
+        const response = await axios.get(`${API_URL}/accounts`);
         setAccounts(response.data);
         if (response.data.length > 0) {
           setAccountId(response.data[0].id);
         }
-      } catch (err: any) {
-        setError('Failed to load accounts');
+      } catch (err) {
+        console.error('Failed to load accounts', err);
       }
     };
 
@@ -45,12 +44,12 @@ export default function ComposePage() {
     setSuccess('');
 
     try {
-      const token = localStorage.getItem('token');
-      await axios.post(
-        'http://localhost:3001/messages/send',
-        { to, subject, body, accountId: parseInt(accountId) },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.post(`${API_URL}/messages/send`, {
+        to,
+        subject,
+        body,
+        accountId: parseInt(accountId),
+      });
 
       setSuccess('Email sent successfully!');
       setTo('');
@@ -64,7 +63,7 @@ export default function ComposePage() {
   };
 
   return (
-    <div style={{ maxWidth: '600px', margin: '20px auto', fontFamily: 'sans-serif' }}>
+    <div style={{ maxWidth: '600px', margin: '20px auto', fontFamily: 'sans-serif', padding: '20px' }}>
       <h1>Compose Email</h1>
       <form onSubmit={handleSend}>
         <div style={{ marginBottom: '15px' }}>
@@ -72,8 +71,9 @@ export default function ComposePage() {
           <select
             value={accountId}
             onChange={(e) => setAccountId(e.target.value)}
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', boxSizing: 'border-box' }}
           >
+            <option value="">Select an account</option>
             {accounts.map((acc) => (
               <option key={acc.id} value={acc.id}>
                 {acc.displayName} ({acc.email})
@@ -89,7 +89,7 @@ export default function ComposePage() {
             value={to}
             onChange={(e) => setTo(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', boxSizing: 'border-box' }}
           />
         </div>
 
@@ -100,7 +100,7 @@ export default function ComposePage() {
             value={subject}
             onChange={(e) => setSubject(e.target.value)}
             required
-            style={{ width: '100%', padding: '8px', marginTop: '5px' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', boxSizing: 'border-box' }}
           />
         </div>
 
@@ -111,7 +111,7 @@ export default function ComposePage() {
             onChange={(e) => setBody(e.target.value)}
             required
             rows={10}
-            style={{ width: '100%', padding: '8px', marginTop: '5px', fontFamily: 'monospace' }}
+            style={{ width: '100%', padding: '8px', marginTop: '5px', boxSizing: 'border-box', fontFamily: 'monospace' }}
           />
         </div>
 
@@ -120,7 +120,7 @@ export default function ComposePage() {
 
         <button
           type="submit"
-          disabled={loading}
+          disabled={loading || accounts.length === 0}
           style={{
             padding: '10px 20px',
             backgroundColor: '#007bff',
@@ -136,4 +136,3 @@ export default function ComposePage() {
     </div>
   );
 }
-
