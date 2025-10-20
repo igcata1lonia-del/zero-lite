@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import authRoutes from './routes/auth';
 import accountRoutes from './routes/accounts';
 import messagesRoutes from './routes/messages';
+import syncRoutes from './routes/sync';
 
 dotenv.config();
 
@@ -13,22 +14,19 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Health check
 app.get('/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
 
-// Routes
 app.use('/auth', authRoutes);
 app.use('/accounts', accountRoutes);
 app.use('/messages', messagesRoutes);
+app.use('/sync', syncRoutes);
 
-// 404 handler
 app.use((req, res) => {
   res.status(404).json({ error: 'Not found' });
 });
 
-// Error handler
 app.use((err: any, req: any, res: any, next: any) => {
   console.error(err);
   res.status(500).json({ error: 'Internal server error' });
