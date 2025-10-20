@@ -1,0 +1,16 @@
+{
+  "name": "zero-lite",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Unified email client for Gmail, Outlook, and ProtonMail",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "lint": "pnpm -r lint"
+  }
+}

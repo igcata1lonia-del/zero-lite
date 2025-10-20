@@ -1,0 +1,19 @@
+{
+  "name": "@zero-lite/db",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "generate": "drizzle-kit generate:pg",
+    "migrate": "drizzle-kit migrate:pg",
+    "studio": "drizzle-kit studio"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.28.0",
+    "pg": "^8.11.0"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.20.0",
+    "typescript": "^5.2.0"
+  }
+}
